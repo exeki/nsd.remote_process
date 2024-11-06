@@ -4,10 +4,11 @@ plugins {
     id("maven-publish")
     kotlin("jvm") version "1.9.22"
     id("groovy")
+    id("java-library")
 }
 
 group = "ru.kazantsev.nsd"
-version = "1.0.1"
+version = "1.0.2"
 
 repositories {
     maven {
