@@ -5,6 +5,8 @@ plugins {
     kotlin("jvm") version "1.9.22"
     id("groovy")
     id("java-library")
+    id("org.jetbrains.dokka") version "1.9.10"
+
 }
 
 group = "ru.kazantsev.nsd"
@@ -44,10 +46,35 @@ dependencies {
     testImplementation("org.codehaus.groovy:groovy-all:3.0.19")
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
+tasks {
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
+    test {
+        useJUnitPlatform()
+    }
+
+    compileKotlin {
+        kotlinOptions.jvmTarget = "11"
+    }
+
+    javadoc {
+        dependsOn(dokkaJavadoc)
+    }
+
+    dokkaJavadoc {
+        outputDirectory.set(buildDir.resolve("docs\\javadoc"))
+    }
+
+    compileJava {
+        targetCompatibility = "11"
+    }
+
+    register<Jar>("javadocJar") {
+        from(getByName("javadoc").outputs.files)
+        archiveClassifier.set("javadoc")
+    }
+
+    register<Jar>("sourcesJar") {
+        from(sourceSets.main.get().allSource)
+        archiveClassifier.set("sources")
+    }
 }
