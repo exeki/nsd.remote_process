@@ -204,8 +204,13 @@ class Utilities {
          * @throws IncompatibleCellTypeException если ячейка содержит неподходящий тип данных
          */
         @JvmStatic
-        fun getCellValueAsDate(row: Row, columnIndex: Int, dateFormat: DateFormat? = null): Optional<Date> {
+        fun getCellValueAsDate(row: Row, columnIndex: Int, dateFormat: DateFormat?): Optional<Date> {
             return getCellValueAsDate(row.getCell(columnIndex), dateFormat)
+        }
+
+        @JvmStatic
+        fun getCellValueAsDate(row: Row, columnIndex: Int): Optional<Date> {
+            return getCellValueAsDate(row, columnIndex, dateFormat)
         }
 
         /**
@@ -217,7 +222,7 @@ class Utilities {
          * @throws IncompatibleCellTypeException если ячейка содержит неподходящий тип данных
          */
         @JvmStatic
-        fun getCellValueAsDate(cell: Cell?, dateFormat: DateFormat? = null): Optional<Date> {
+        fun getCellValueAsDate(cell: Cell?, dateFormat: DateFormat?): Optional<Date> {
             if (cell == null) return Optional.empty()
             return when (cell.cellType) {
                 CellType.STRING -> {
@@ -233,6 +238,11 @@ class Utilities {
             }
         }
 
+        @JvmStatic
+        fun getCellValueAsDate(cell: Cell?): Optional<Date> {
+            return getCellValueAsDate(cell, dateFormat)
+        }
+
         /**
          * Получить значение ячейки в виде даты или выкинуть исключение
          * @param row строка
@@ -245,8 +255,13 @@ class Utilities {
          * @throws NoRequiredCellValueException если нет значения
          */
         @JvmStatic
-        fun getCellValueAsDateElseThrow(row: Row, columnIndex: Int, dateFormat: DateFormat? = null): Date {
+        fun getCellValueAsDateElseThrow(row: Row, columnIndex: Int, dateFormat: DateFormat?): Date {
             return getCellValueAsDateElseThrow(getCellOrThrow(row, columnIndex), dateFormat)
+        }
+
+        @JvmStatic
+        fun getCellValueAsDateElseThrow(row: Row, columnIndex: Int): Date {
+            return getCellValueAsDateElseThrow(row, columnIndex, dateFormat)
         }
 
         /**
@@ -260,9 +275,14 @@ class Utilities {
          * @throws NoRequiredCellValueException если нет значения
          */
         @JvmStatic
-        fun getCellValueAsDateElseThrow(cell: Cell?, dateFormat: DateFormat? = null): Date {
+        fun getCellValueAsDateElseThrow(cell: Cell?, dateFormat: DateFormat?): Date {
             throwIfCellIsNull(cell)
             return getCellValueAsDate(cell, dateFormat).orElseThrow { NoRequiredCellValueException(cell!!) }
+        }
+
+        @JvmStatic
+        fun getCellValueAsDateElseThrow(cell: Cell?): Date {
+            return getCellValueAsDateElseThrow(cell, dateFormat)
         }
 
         //Получение чисел:
@@ -350,9 +370,14 @@ class Utilities {
         fun getCellValueAsBoolean(
             row: Row,
             columnIndex: Int,
-            stringConvertMap: Map<String, Boolean>? = null
+            stringConvertMap: Map<String, Boolean>?
         ): Optional<Boolean> {
             return getCellValueAsBoolean(row.getCell(columnIndex), stringConvertMap)
+        }
+
+        @JvmStatic
+        fun getCellValueAsBoolean(row: Row, columnIndex: Int): Optional<Boolean> {
+            return getCellValueAsBoolean(row, columnIndex, stringToBooleanConvertMap)
         }
 
         /**
@@ -367,7 +392,7 @@ class Utilities {
         @JvmStatic
         fun getCellValueAsBoolean(
             cell: Cell?,
-            stringConvertMap: Map<String, Boolean>? = null
+            stringConvertMap: Map<String, Boolean>?
         ): Optional<Boolean> {
             if (cell == null) return Optional.empty()
             return when (cell.cellType) {
@@ -391,6 +416,11 @@ class Utilities {
             }
         }
 
+        @JvmStatic
+        fun getCellValueAsBoolean(cell: Cell?): Optional<Boolean> {
+            return getCellValueAsBoolean(cell, stringToBooleanConvertMap)
+        }
+
         /**
          * Получить значение ячейки как булево или выкинуть исключение
          * @param row строка
@@ -407,9 +437,14 @@ class Utilities {
         fun getCellValueAsBooleanElseThrow(
             row: Row,
             columnIndex: Int,
-            stringConvertMap: Map<String, Boolean>? = null
+            stringConvertMap: Map<String, Boolean>?
         ): Boolean {
             return getCellValueAsBooleanElseThrow(getCellOrThrow(row, columnIndex), stringConvertMap)
+        }
+
+        @JvmStatic
+        fun getCellValueAsBooleanElseThrow(row: Row, columnIndex: Int): Boolean {
+            return getCellValueAsBooleanElseThrow(row, columnIndex, stringToBooleanConvertMap)
         }
 
         /**
@@ -426,10 +461,23 @@ class Utilities {
         @JvmStatic
         fun getCellValueAsBooleanElseThrow(
             cell: Cell?,
-            stringConvertMap: Map<String, Boolean>? = null
+            stringConvertMap: Map<String, Boolean>?
         ): Boolean {
             throwIfCellIsNull(cell)
             return getCellValueAsBoolean(cell, stringConvertMap).orElseThrow { NoRequiredCellValueException(cell!!) }
         }
+
+        @JvmStatic
+        fun getCellValueAsBooleanElseThrow(cell: Cell?): Boolean {
+            return getCellValueAsBooleanElseThrow(cell, stringToBooleanConvertMap)
+        }
+
+        //Получение справочника yes/no:
+
+        //TODO
+
+        //Получение строки
+
+        //TODO
     }
 }
