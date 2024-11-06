@@ -1,13 +1,13 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
+    id("maven-publish")
     kotlin("jvm") version "1.9.22"
     id("groovy")
-    application
 }
 
 group = "ru.kazantsev.nsd"
-version = "1.0.0"
+version = "1.0.1"
 
 repositories {
     maven {
@@ -19,6 +19,19 @@ repositories {
     }
     mavenCentral()
     mavenLocal()
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/exeki/nsd.remote_process")
+            credentials {
+                username = System.getenv("GITHUB_USERNAME")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
 }
 
 dependencies {
@@ -36,8 +49,4 @@ tasks.test {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
-}
-
-application {
-    mainClass.set("MainKt")
 }
