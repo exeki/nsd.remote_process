@@ -25,6 +25,11 @@ repositories {
 }
 
 publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["kotlin"])
+        }
+    }
     repositories {
         maven {
             name = "GitHubPackages"
