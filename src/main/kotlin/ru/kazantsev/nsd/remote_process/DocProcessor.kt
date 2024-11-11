@@ -98,7 +98,6 @@ open class DocProcessor
      * созданный либо по указанному outDirPath, либо в той же папке, что и прочтенный файл.
      */
     fun write() {
-        logger.info("Записываю данные в файл: $outFile")
 
         if (outDirPath != null) {
             val file = File(outDirPath!!)
@@ -112,6 +111,8 @@ open class DocProcessor
         else outDirPath + "//" + file.name + "_processed.xlsx"
 
         outFile = File(outFilePath)
+
+        logger.info("Записываю данные в файл: $outFile")
 
         val out = FileOutputStream(outFile!!)
         workbook.write(out)
