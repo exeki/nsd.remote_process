@@ -133,8 +133,7 @@ class Utilities {
          */
         @JvmStatic
         fun getCellValue(row: Row, columnIndex: Int): Optional<Any> {
-            val cell: Cell = row.getCell(columnIndex)
-            return getCellValue(cell)
+            return getCellValue(row.getCell(columnIndex))
         }
 
         /**
