@@ -55,7 +55,11 @@ class Utilities {
          */
         @JvmStatic
         fun checkRpcResponse(response: RpcResponseDto, notNull: Boolean = false): RpcResponseDto {
-            if (response.error != null) throw JsonRpcErrorResultException("При запросе через json rpc вернулась ошибка: " + response.error.message)
+            if (response.error != null) throw JsonRpcErrorResultException(
+                "При запросе через json rpc вернулась ошибка: " +
+                        "код: ${response.error.code} " +
+                        "сообщение: ${response.error.message}"
+            )
             if (notNull && response.result == null) throw JsonRpcErrorResultException("При запросе через json rpc вернулся пустой ответ.")
             return response
         }
