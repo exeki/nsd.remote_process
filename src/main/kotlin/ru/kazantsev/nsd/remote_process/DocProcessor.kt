@@ -89,18 +89,20 @@ open class DocProcessor
         while (rowIt.hasNext()) {
             val row = rowIt.next()
             val markCell = Utilities.getOrCreateCell(row, markCellIndex)
-            logger.debug("Проверяю строку {}, тип ячейки отметки {}", row.rowNum, markCell.cellType)
+            val cellType = markCell.cellType
+            logger.debug("Проверяю строку {}, тип ячейки отметки {}", row.rowNum, cellType)
             Utilities.getOrCreateCell(row, markCellIndex + 1)
-            val cellIsBlank = markCell.cellType == CellType.BLANK
+            val cellIsBlank = cellType == CellType.BLANK
             logger.debug("cellIsBlank: $cellIsBlank")
-            val cellIsBooleanAndFalse = markCell.cellType == CellType.BOOLEAN && !markCell.booleanCellValue
+            val cellIsBooleanAndFalse = cellType == CellType.BOOLEAN && !markCell.booleanCellValue
             logger.debug("cellIsBooleanAndFalse: $cellIsBooleanAndFalse")
-            if (cellIsBlank || cellIsBooleanAndFalse) {
+            val cellIsStringAndIsBlank = cellType == CellType.STRING && (markCell.stringCellValue == null || markCell.stringCellValue.isEmpty())
+            logger.debug("cellIsStringAndIsBlank: $cellIsStringAndIsBlank")
+
+            if (cellIsBlank || cellIsBooleanAndFalse || cellIsStringAndIsBlank) {
                 logger.debug("Добавляем строку к обработке")
                 rowsToProcess.add(row)
-            } else {
-                logger.debug("Не добавляем строку в обработке")
-            }
+            } else logger.debug("Не добавляем строку в обработке")
         }
         count = rowsToProcess.size
         if(count == 0) {
