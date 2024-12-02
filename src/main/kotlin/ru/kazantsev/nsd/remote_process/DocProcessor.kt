@@ -78,6 +78,9 @@ open class DocProcessor
     init {
         logger.info("Сборка нового DocProcessor. Читаю файл: ${file.path}")
         val rowIt = sheet.rowIterator()
+        logger.info("Лист: ${sheet.sheetName}")
+        logger.info("Строк на листе: ${sheet.lastRowNum}")
+
         val headRow = rowIt.next()
         Utilities.getOrCreateCell(headRow, markCellIndex).setCellValue("Отметка о успешном выполнении")
         Utilities.getOrCreateCell(headRow, markCellIndex + 1).setCellValue("Сообщение")
