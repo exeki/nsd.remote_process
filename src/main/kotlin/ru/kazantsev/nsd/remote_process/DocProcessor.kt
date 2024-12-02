@@ -8,6 +8,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import ru.kazantsev.nsd.remote_process.exception.NoRowsToProcess
 
 import java.io.File
 import java.io.FileOutputStream
@@ -84,16 +85,29 @@ open class DocProcessor
         val headRow = rowIt.next()
         Utilities.getOrCreateCell(headRow, markCellIndex).setCellValue("Отметка о успешном выполнении")
         Utilities.getOrCreateCell(headRow, markCellIndex + 1).setCellValue("Сообщение")
+        logger.debug("Собираю строки для обработки")
         while (rowIt.hasNext()) {
             val row = rowIt.next()
             val markCell = Utilities.getOrCreateCell(row, markCellIndex)
             Utilities.getOrCreateCell(row, markCellIndex + 1)
-            if (markCell.cellType == CellType.BLANK || (markCell.cellType == CellType.BOOLEAN && !markCell.booleanCellValue)) {
+            val cellIsBlank = markCell.cellType == CellType.BLANK
+            logger.debug("cellIsBlank: $cellIsBlank")
+            val cellIsBooleanAndFalse = markCell.cellType == CellType.BOOLEAN && !markCell.booleanCellValue
+            logger.debug("cellIsBooleanAndFalse: $cellIsBooleanAndFalse")
+            if (cellIsBlank || cellIsBooleanAndFalse) {
+                logger.debug("Добавляем строку к обработке")
                 rowsToProcess.add(row)
+            } else {
+                logger.debug("Не добавляем строку в обработке")
             }
         }
         count = rowsToProcess.size
-        logger.info("Файл прочтен, DocProcessor собран")
+        if(count == 0) {
+            val e = NoRowsToProcess(this)
+            logger.error(e.message)
+            throw e
+        }
+        logger.info("Файл прочтен, DocProcessor собран. Строк к обработке: $count")
     }
 
     /**
