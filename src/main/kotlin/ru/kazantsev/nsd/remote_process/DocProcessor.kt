@@ -89,6 +89,7 @@ open class DocProcessor
         while (rowIt.hasNext()) {
             val row = rowIt.next()
             val markCell = Utilities.getOrCreateCell(row, markCellIndex)
+            logger.debug("Проверяю строку {}, тип ячейки отметки {}", row.rowNum, markCell.cellType)
             Utilities.getOrCreateCell(row, markCellIndex + 1)
             val cellIsBlank = markCell.cellType == CellType.BLANK
             logger.debug("cellIsBlank: $cellIsBlank")

@@ -8,6 +8,6 @@ import ru.kazantsev.nsd.remote_process.DocProcessor
 class NoRowsToProcess(val docProcessor: DocProcessor) : RuntimeException() {
     override val message: String
         get() {
-            return "Не найдено строк к обработке на листе ${docProcessor.sheet.sheetName} документа ${docProcessor.file.name}"
+            return "Не найдено строк к обработке на листе \"${docProcessor.sheet.sheetName}\" документа \"${docProcessor.file.name}\""
         }
 }
