@@ -89,20 +89,26 @@ open class DocProcessor
         while (rowIt.hasNext()) {
             val row = rowIt.next()
             val markCell = Utilities.getOrCreateCell(row, markCellIndex)
-            val cellType = markCell.cellType
-            logger.debug("Проверяю строку {}, тип ячейки отметки {}", row.rowNum, cellType)
+            val markCellType = markCell.cellType
+            logger.debug("Проверяю строку {}, тип ячейки отметки {}", row.rowNum, markCellType)
             Utilities.getOrCreateCell(row, markCellIndex + 1)
-            val cellIsBlank = cellType == CellType.BLANK
+            val cellIsBlank = markCellType == CellType.BLANK
             logger.debug("cellIsBlank: $cellIsBlank")
-            val cellIsBooleanAndFalse = cellType == CellType.BOOLEAN && !markCell.booleanCellValue
+            val cellIsBooleanAndFalse = markCellType == CellType.BOOLEAN && !markCell.booleanCellValue
             logger.debug("cellIsBooleanAndFalse: $cellIsBooleanAndFalse")
-            val cellIsStringAndIsBlank = cellType == CellType.STRING && (markCell.stringCellValue == null || markCell.stringCellValue.isEmpty())
+            val cellIsStringAndIsBlank = markCellType == CellType.STRING && (markCell.stringCellValue == null || markCell.stringCellValue.isEmpty())
             logger.debug("cellIsStringAndIsBlank: $cellIsStringAndIsBlank")
 
-            if (cellIsBlank || cellIsBooleanAndFalse || cellIsStringAndIsBlank) {
-                logger.debug("Добавляем строку к обработке")
-                rowsToProcess.add(row)
-            } else logger.debug("Не добавляем строку в обработке")
+            if(markCellType == CellType.BLANK) {
+                logger.debug("Ячейка для отметки имеет тип BLANK")
+                addRowToProcess(row)
+            } else if(markCellType == CellType.BOOLEAN && !markCell.booleanCellValue) {
+                logger.debug("Ячейка для отметки имеет тип BOOLEAN и содержит значение \"${markCell.booleanCellValue}\"")
+                addRowToProcess(row)
+            } else if(markCellType == CellType.STRING && (markCell.stringCellValue == null || markCell.stringCellValue.isBlank())) {
+                logger.debug("Ячейка для отметки имеет тип STRING и содержит значение \"${markCell.stringCellValue}\"")
+                addRowToProcess(row)
+            } else logger.debug("Не добавляем строку к обработке, тк ячейка для отметки не подходит по условиям")
         }
         count = rowsToProcess.size
         if(count == 0) {
@@ -111,6 +117,11 @@ open class DocProcessor
             throw e
         }
         logger.info("Файл прочтен, DocProcessor собран. Строк к обработке: $count")
+    }
+
+    protected fun addRowToProcess(row : Row){
+        logger.debug("Добавляем строку в обработке")
+        this.rowsToProcess.add(row)
     }
 
     /**
