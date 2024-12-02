@@ -108,7 +108,7 @@ open class DocProcessor
             } else if(markCellType == CellType.STRING && (markCell.stringCellValue == null || markCell.stringCellValue.isBlank())) {
                 logger.debug("Ячейка для отметки имеет тип STRING и содержит значение \"${markCell.stringCellValue}\"")
                 addRowToProcess(row)
-            } else logger.debug("Не добавляем строку к обработке, тк ячейка для отметки не подходит по условиям")
+            } else logger.debug("Не добавляем строку к обработке, тк ячейка для отметки не подходит по условиям. Значение ячейки \"${markCell.stringCellValue}\".")
         }
         count = rowsToProcess.size
         if(count == 0) {
