@@ -1,4 +1,4 @@
-package ru.kazantsev.nsd.remote_process.example
+
 
 import org.apache.poi.ss.usermodel.Row
 import ru.kazantsev.nsd.basic_api_connector.ConnectorParams

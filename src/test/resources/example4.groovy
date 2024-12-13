@@ -1,18 +1,17 @@
-package ru.kazantsev.nsd.remote_process.example
+
 
 import org.apache.poi.ss.usermodel.Row
 import ru.kazantsev.nsd.basic_api_connector.ConnectorParams
 import ru.kazantsev.nsd.json_rpc_connector.Connector
 import ru.kazantsev.nsd.json_rpc_connector.RpcRequestDto
 import ru.kazantsev.nsd.json_rpc_connector.RpcResponseDto
-import ru.kazantsev.nsd.json_rpc_connector.RpcUtilities
-import ru.kazantsev.nsd.remote_process.DocProcessor
-import ru.kazantsev.nsd.remote_process.Utilities
+import ru.kazantsev.nsd.json_rpc_connector.ConditionUtilities
+import ru.kazantsev.nsd.remote_process.DocProcessor;
+import ru.kazantsev.nsd.remote_process.Utilities;
 
 static void main(String[] args) {
-
     //Заранее создаем jsonPrc коннектор и утилитарный класс для работы с rpc модулем
-    RpcUtilities rpc = RpcUtilities.getInstance()
+    ConditionUtilities rpc = ConditionUtilities.getInstance()
     Connector connector = new Connector(ConnectorParams.byConfigFile("MY_INSTALLATION_ID"))
 
     //Создаем DocProcessor, в нем указываем путь до файла и индекс столбца, куда будет записываться результат обработки
