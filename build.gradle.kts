@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "ru.kazantsev.nsd"
-version = "1.1.2"
+version = "1.1.2.1"
 
 repositories {
     maven {
@@ -43,7 +43,7 @@ publishing {
 }
 
 dependencies {
-    api("ru.kazantsev.nsd:basic_api_connector:1.1.2")
+    api("ru.kazantsev.nsd:basic_api_connector:1.1.2.1")
     api("ru.kazantsev.nsd:json_rpc_connector:1.2")
     implementation("org.slf4j:slf4j-api:2.0.9")
     api("org.apache.poi:poi-ooxml:5.3.0")
