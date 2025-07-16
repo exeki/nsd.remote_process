@@ -13,7 +13,7 @@ import ru.kazantsev.nsd.remote_process.exception.NoRowsToProcess
 import java.io.File
 import java.io.FileOutputStream
 import java.util.function.Function
-
+import java.lang.reflect.UndeclaredThrowableException
 import kotlin.math.roundToLong
 
 import ru.kazantsev.nsd.remote_process.exception.PlannedException
@@ -245,13 +245,13 @@ open class DocProcessor
         try {
             val result = closure.apply(row)
             if (result != null) setRowSuccess(row, result) else setRowSuccess(row)
-
         } catch (ea: PlannedException) {
-            logger.debug("Произошло исключение, класс: ${ea.javaClass.name}")
+            logger.debug("Произошло исключение, класс: ${ea.javaClass.name}, класс причины: ${ea.cause?.javaClass?.name}")
             setRowError(row, ea.message!!)
         } catch (e: Exception) {
-            logger.debug("Произошло исключение, класс: ${e.javaClass.name}")
-            setRowError(row, "При обработке строки ${row.rowNum} произошла необрабатываемая ошибка: ${e.message}")
+            logger.debug("Произошло исключение, класс: ${e.javaClass.name}, класс причины: ${e.cause?.javaClass?.name}")
+            if(e.cause is PlannedException) setRowError(row, e.message!!)
+            else setRowError(row, "При обработке строки ${row.rowNum} произошла необрабатываемая ошибка: ${e.message}")
         }
     }
 
