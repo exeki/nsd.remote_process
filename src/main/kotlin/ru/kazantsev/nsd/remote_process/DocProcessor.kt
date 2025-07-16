@@ -251,7 +251,7 @@ open class DocProcessor
                 if (ea.cause != null) throw ea.cause!!
                 else throw ea
             } catch (pe: PlannedException) {
-                setRowError(row, ea.message!!)
+                setRowError(row, pe.message!!)
             } catch (e: Exception) {
                 setRowError(
                     row,

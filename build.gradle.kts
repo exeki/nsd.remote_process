@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "ru.kazantsev.nsd"
-version = "1.1.2.4"
+version = "1.1.2.5"
 
 repositories {
     maven {
