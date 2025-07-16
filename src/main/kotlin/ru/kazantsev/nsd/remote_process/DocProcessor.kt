@@ -96,22 +96,23 @@ open class DocProcessor
             logger.debug("cellIsBlank: $cellIsBlank")
             val cellIsBooleanAndFalse = markCellType == CellType.BOOLEAN && !markCell.booleanCellValue
             logger.debug("cellIsBooleanAndFalse: $cellIsBooleanAndFalse")
-            val cellIsStringAndIsBlank = markCellType == CellType.STRING && (markCell.stringCellValue == null || markCell.stringCellValue.isEmpty())
+            val cellIsStringAndIsBlank =
+                markCellType == CellType.STRING && (markCell.stringCellValue == null || markCell.stringCellValue.isEmpty())
             logger.debug("cellIsStringAndIsBlank: $cellIsStringAndIsBlank")
 
-            if(markCellType == CellType.BLANK) {
+            if (markCellType == CellType.BLANK) {
                 logger.debug("Ячейка для отметки имеет тип BLANK")
                 addRowToProcess(row)
-            } else if(markCellType == CellType.BOOLEAN && !markCell.booleanCellValue) {
+            } else if (markCellType == CellType.BOOLEAN && !markCell.booleanCellValue) {
                 logger.debug("Ячейка для отметки имеет тип BOOLEAN и содержит значение \"${markCell.booleanCellValue}\"")
                 addRowToProcess(row)
-            } else if(markCellType == CellType.STRING && (markCell.stringCellValue == null || markCell.stringCellValue.isBlank())) {
+            } else if (markCellType == CellType.STRING && (markCell.stringCellValue == null || markCell.stringCellValue.isBlank())) {
                 logger.debug("Ячейка для отметки имеет тип STRING и содержит значение \"${markCell.stringCellValue}\"")
                 addRowToProcess(row)
             } else logger.debug("Не добавляем строку к обработке, тк ячейка для отметки не подходит по условиям. Значение ячейки \"${markCell.stringCellValue}\".")
         }
         count = rowsToProcess.size
-        if(count == 0) {
+        if (count == 0) {
             val e = NoRowsToProcess(this)
             logger.error(e.message)
             throw e
@@ -119,7 +120,7 @@ open class DocProcessor
         logger.info("Файл прочтен, DocProcessor собран. Строк к обработке: $count")
     }
 
-    protected fun addRowToProcess(row : Row){
+    protected fun addRowToProcess(row: Row) {
         logger.debug("Добавляем строку в обработке")
         this.rowsToProcess.add(row)
     }
@@ -244,10 +245,13 @@ open class DocProcessor
         try {
             val result = closure.apply(row)
             if (result != null) setRowSuccess(row, result) else setRowSuccess(row)
+
         } catch (ea: PlannedException) {
+            logger.debug("Произошло исключение, класс: ${ea.javaClass.name}")
             setRowError(row, ea.message!!)
         } catch (e: Exception) {
-            setRowError(row, "При редактировании ОП ${row.rowNum} произошла необрабатываемая ошибка: ${e.message}")
+            logger.debug("Произошло исключение, класс: ${e.javaClass.name}")
+            setRowError(row, "При обработке строки ${row.rowNum} произошла необрабатываемая ошибка: ${e.message}")
         }
     }
 
